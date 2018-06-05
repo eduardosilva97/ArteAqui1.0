@@ -20,10 +20,15 @@ export class AuthService {
   }
 
   createUser(user: User){
-    return this.angularFireAuth.auth.createUserWithEmailAndPassword(user.email,user.password);
+    return this.angularFireAuth.auth.createUserWithEmailAndPassword(user.email, user.password);
+  }
+
+  signIn(user: User) {
+    return this.angularFireAuth.auth.signInWithEmailAndPassword(user.email, user.password);
   }
 
   signOut(){
     return this.angularFireAuth.auth.signOut();
   }
+
 }

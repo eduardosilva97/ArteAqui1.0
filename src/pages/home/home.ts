@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { SigninPage } from '../signin/signin';
+import { InicioPage } from '../inicio/inicio';
 import { AuthService } from '../../providers/auth/auth-service';
 
 @Component({
@@ -14,7 +14,7 @@ export class HomePage {
     signOut() {
       this.authService.signOut()
       .then(() => {
-        this.navCtrl.setRoot(SigninPage);
+        this.navCtrl.setRoot(InicioPage);
       })
       .catch((error) => {
         console.error(error);

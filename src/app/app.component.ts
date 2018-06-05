@@ -3,6 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { InicioPage } from '../pages/inicio/inicio';
 import { HomePage } from '../pages/home/home';
 import { SignupPage } from '../pages/signup/signup';
 import { SigninPage } from '../pages/signin/signin';
@@ -19,7 +20,7 @@ export class MyApp {
         this.rootPage = HomePage;
         authObserver.unsubscribe();
       }else{
-        this.rootPage = SigninPage;
+        this.rootPage = InicioPage;
         authObserver.unsubscribe;
           }
     });

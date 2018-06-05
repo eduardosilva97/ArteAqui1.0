@@ -8,6 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { MyApp } from './app.component';
+import { InicioPage } from '../pages/inicio/inicio';
 import { HomePage } from '../pages/home/home';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
@@ -27,6 +28,7 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
+    InicioPage,
     HomePage,
     SigninPage,
     SignupPage,
@@ -41,6 +43,7 @@ const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    InicioPage,
     HomePage,
     SigninPage,
     SignupPage,
