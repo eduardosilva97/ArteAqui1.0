@@ -26,6 +26,7 @@
     "@ionic-native/status-bar": "4.7.0",
     "@ionic/storage": "2.1.3",
     "angularfire2": "^5.0.0-rc.10",
+    "cordova-plugin-facebook4": "^2.1.0",
     "firebase": "^5.0.4",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
@@ -37,5 +38,13 @@
     "@ionic/app-scripts": "3.1.9",
     "typescript": "~2.6.2"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-facebook4": {
+        "APP_ID": "141501700047888",
+        "APP_NAME": "Arteaqui"
+      }
+    }
+  }
 }
