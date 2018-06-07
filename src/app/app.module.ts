@@ -15,6 +15,10 @@ import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 
 import { AuthService } from '../providers/auth/auth-service';
+import { Geolocation } from '@ionic-native/geolocation';
+import firebase from 'firebase';
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCG3ii_N0KvsAwByeMRjsnbI28Nt3yivbY",
@@ -52,6 +56,7 @@ const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService
   ]

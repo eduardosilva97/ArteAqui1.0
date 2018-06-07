@@ -1,10 +1,14 @@
-
-<ion-content padding class="bg-image">
-  <p>Teste</p>
-
-  <button ion-button block color= "primary" (click)="signOut()">
-    Sair
-  </button>
-
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Mapa
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="signOut()">Sair</button>
+    </ion-buttons> 
+  </ion-navbar>
+</ion-header>
  
+<ion-content>
+  <div style="width:100%; height:100%" #map="" id="map"></div> 
 </ion-content>
