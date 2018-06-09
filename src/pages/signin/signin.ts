@@ -1,7 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
-import { SignupPage } from '../signup/signup';
-import { ResetpasswordPage } from '../resetpassword/resetpassword';
 import { AuthService } from '../../providers/auth/auth-service';
 import { HomePage } from '../home/home';
 import { NgForm } from '@angular/forms';

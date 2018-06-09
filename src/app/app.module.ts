@@ -1,22 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule, List, NavController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { HttpModule } from '@angular/http';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
 import { InicioPage } from '../pages/inicio/inicio';
 import { HomePage } from '../pages/home/home';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
+import { PerfilPage } from '../pages/perfil/perfil';
+
+import { AdicionarEventosPage } from '../pages/adicionareventos/adicionareventos';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 
 import { AuthService } from '../providers/auth/auth-service';
 import { Geolocation } from '@ionic-native/geolocation';
 import firebase from 'firebase';
+import { EventosService } from '../providers/eventos-service/eventos-service';
+
 
 
 
@@ -36,13 +43,18 @@ const firebaseConfig = {
     HomePage,
     SigninPage,
     SignupPage,
+    PerfilPage,
+   
+    AdicionarEventosPage,
     ResetpasswordPage
-  ],
+   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -51,12 +63,16 @@ const firebaseConfig = {
     HomePage,
     SigninPage,
     SignupPage,
+    PerfilPage,
+  
+    AdicionarEventosPage,
     ResetpasswordPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
+    EventosService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService
   ]

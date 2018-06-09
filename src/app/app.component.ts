@@ -1,20 +1,34 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Nav, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { InicioPage } from '../pages/inicio/inicio';
 import { HomePage } from '../pages/home/home';
 import { SignupPage } from '../pages/signup/signup';
-import { SigninPage } from '../pages/signin/signin';
+import { PerfilPage } from '../pages/perfil/perfil';
+import { AdicionarEventosPage } from '../pages/adicionareventos/adicionareventos';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireList } from 'angularfire2/database';
+import { EventosService } from '../providers/eventos-service/eventos-service';
+
+import { AuthService } from '../providers/auth/auth-service';
+import { Observable } from 'rxjs/Observable';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild('content') 
+  nav: Nav;
   rootPage:any = SignupPage;
+  eventos: Observable<any>;
+  
+  constructor(private authService: AuthService, platform: Platform, 
+    statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth,
+     private eventosService: EventosService, private toast: ToastController) {
+      
+      this.eventos = this.eventosService.getAll();
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth) {
     const authObserver = afAuth.authState.subscribe(user => {
       if(user){
         this.rootPage = HomePage;
@@ -31,6 +45,43 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
+    
   }
+  
+  signOut(){
+    this.authService.signOut()
+    .then(() => {
+       this.nav.setRoot(InicioPage);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  perfil(){
+    this.nav.push(PerfilPage);
+  }
+
+  adicionarEvento(){
+    this.nav.push(AdicionarEventosPage);
+  }
+
+  editarEvento(evento: any){
+    this.nav.push('AdicionarEventosPage', { eventos: evento});
+  }
+
+  removerEvento(key: string){
+    this.eventosService.remove(key)
+      .then(() =>{
+        this.toast.create({ message: "Evento removido com sucesso.", duration: 3000}).present();
+      })
+      .catch((e)=>{
+        this.toast.create({ message: "Erro ao remover evento", duration: 3000}).present();
+      })
+  }
+
+ /* adicionarMarcador(evento: any){
+      HomePage.marcaMapa(evento.key);
+  }*/
 }
 

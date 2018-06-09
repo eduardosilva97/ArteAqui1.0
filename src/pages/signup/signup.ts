@@ -3,7 +3,6 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
-import { HomePage } from '../home/home';
 import { SigninPage } from '../signin/signin';
  
 @IonicPage()

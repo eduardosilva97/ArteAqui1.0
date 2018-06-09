@@ -1,1 +1,37 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content">
+        <ion-header>
+          <ion-toolbar color='primary'>
+            <ion-title>Menu</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        
+<ion-content>
+    <ion-list>
+        <button color='light' ion-item (click)="perfil()" menuClose>
+            Perfil
+        </button>
+        <button color='light' ion-item (click)="buscarEventos()" menuClose>
+            Buscar Eventos
+        </button>
+        <button color='light' ion-item (click)="adicionarEvento()" menuClose>
+            Adicionar Evento
+             </button>
+         <button color='light' ion-item (click)="signOut()" menuClose>
+            Sair
+         </button>
+    </ion-list>
+    <ion-toolbar color='cinzaclaro'>
+        <p>Principais Eventos<p>
+    </ion-toolbar>
+    <ion-list>
+       <ion-item-sliding *ngFor="let evento of eventos | async">
+            <button ion-item color='light' (click) = "marcaMapa()" menuClose>
+               {{ evento.eventoNome }}
+           </button>
+        </ion-item-sliding>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
+<ion-nav #content [root]="rootPage"  swipeBackEnabled="false"></ion-nav>
