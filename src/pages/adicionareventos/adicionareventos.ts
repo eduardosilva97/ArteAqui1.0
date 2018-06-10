@@ -31,9 +31,13 @@ export class AdicionarEventosPage {
     this.form = this.formBuilder.group ({
       key:[this.evento.key],
       eventoNome: [this.evento.nome, Validators.required],
-      latlng: [this.evento.lat, Validators.required],
+      date: [this.evento.date, Validators.required],
       preco: [this.evento.preco, Validators.required],
+      classificacao:[this.evento.classificacao, Validators.required],
+      genero:[this.evento.genero, Validators.required],
       local: [this.evento.local, Validators.required],
+      latlng: [this.evento.lat, Validators.required],
+      
 
     });
   }

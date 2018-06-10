@@ -3,7 +3,7 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
-import { SigninPage } from '../signin/signin';
+import { HomePage } from '../home/homepage/home';
  
 @IonicPage()
 @Component({
@@ -25,12 +25,10 @@ export class SignupPage {
       
       this.authService.createUser(this.user)
        .then((user: any) => {
-        user.sendEmailVerification();
-
         toast.setMessage('Usuário criado com sucesso.');
         toast.present();
 
-        this.navCtrl.setRoot(SigninPage);
+        this.navCtrl.setRoot(HomePage);
        })
        .catch((error: any) => {
         if(error.code == 'auth/email-already-in-use'){

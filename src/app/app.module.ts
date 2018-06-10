@@ -28,6 +28,7 @@ import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
 import { DetalhaeventoPageModule } from '../pages/detalhaevento/detalhaevento.module';
 import { HomePageModule } from '../pages/home/homepage/home.module';
 import { BuscareventosPage } from '../pages/buscareventos/buscareventos';
+import { UsuarioService } from '../providers/usuario-service/usuario-service';
 
 
 
@@ -85,6 +86,7 @@ const firebaseConfig = {
     Geolocation,
     EventosService,
     MapsService,
+    UsuarioService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService
   ]

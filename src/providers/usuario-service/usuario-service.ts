@@ -3,12 +3,11 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import 'rxjs/add/operator/map';
 
 
-
 @Injectable()
-export class EventosService {
+export class UsuarioService {
 
   
-  private path = 'evento/' ;
+  private path = 'usuario/' ;
 
   constructor(private db: AngularFireDatabase) {}
    
@@ -16,8 +15,8 @@ export class EventosService {
       return this.db.list(this.path)
       .snapshotChanges()
       .map(changes => {
-        return changes.map(e => ({
-          key: e.payload.key, ...e.payload.val()          
+        return changes.map(u => ({
+          key: u.payload.key, ...u.payload.val()          
         }));
       });
     }
@@ -25,23 +24,23 @@ export class EventosService {
     get(key:string){
       return this.db.object(this.path + key)
       .snapshotChanges()
-      .map(e => {
-        return { key: e.key, ...e.payload.val() };
+      .map(u => {
+        return { key: u.key, ...u.payload.val() };
       })
       
     }
   
    
-    save(evento: any){
+    save(usuario: any){
       return new Promise ((resolve, reject) =>{
-        if (evento.key){
+        if (usuario.key){
           this.db.list(this.path)
-           .update(evento.key, {eventoNome: evento.eventoNome, latlng: evento.latlng,date: evento.date, preco: evento.preco, classificacao: evento.classificacao, genero: evento.genero, local: evento.local})
+           .update(usuario.key, {usuarioNome: usuario.usuarioNome, usuario: usuario.idade})
             .then(()=>resolve())
             .catch((er) => reject(er));
           } else {
             this.db.list(this.path)
-            .push({eventoNome: evento.eventoNome, latlng: evento.latlng, preco: evento.preco, classificacao: evento.classificacao, genero: evento.genero, date: evento.date, local: evento.local})
+            .push({usuarioNome: usuario.usuarioNome, latlng: usuario.latlng, preco: usuario.preco, local: usuario.local})
              .then((result: any)=>resolve(result.key));
           }
       });

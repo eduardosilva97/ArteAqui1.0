@@ -1,6 +1,3 @@
-
-
-
 <ion-menu side="left" [content]="content">
         <ion-header>
           <ion-toolbar color='primary'>
@@ -32,7 +29,7 @@
     <ion-list>
        <ion-item-sliding *ngFor="let evento of eventos | async">
             <button ion-item color='light' (click) = "detalharEvento(evento)" menuClose>
-                <h1>{{ evento.eventoNome }}</h1>
+                <ion-title center-text>{{ evento.eventoNome }}</ion-title>
                 <p> Local: {{ evento.local }} </p> 
                 <p> Preço: R${{ evento.preco }} </p>
            </button>

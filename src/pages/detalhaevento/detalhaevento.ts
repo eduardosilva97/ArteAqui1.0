@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EventosService } from '../../providers/eventos-service/eventos-service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { HomePage } from '../home/homepage/home';
 
 
 @IonicPage()
@@ -27,6 +28,10 @@ export class DetalhaPage {
     console.log(this.preco);
 
 
+  }
+
+  marcaMapa(){
+    this.navCtrl.setRoot(HomePage);
   }
 
   detalharEvento(c: any){ 

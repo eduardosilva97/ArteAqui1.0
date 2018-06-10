@@ -77,7 +77,7 @@ export class HomePage {
     position: new google.maps.LatLng(-12.981265,-38.467062)
   });
  
-   let content = "<h4>Suruba!</h4>";         
+   let content = "<h4>Evento Aqui!</h4>";         
  
   this.addInfoWindow(marker, content);
   }
