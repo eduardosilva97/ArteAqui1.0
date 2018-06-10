@@ -1,4 +1,7 @@
-<ion-menu [content]="content">
+
+
+
+<ion-menu side="left" [content]="content">
         <ion-header>
           <ion-toolbar color='primary'>
             <ion-title>Menu</ion-title>
@@ -16,6 +19,9 @@
         <button color='light' ion-item (click)="adicionarEvento()" menuClose>
             Adicionar Evento
              </button>
+        <button color='light' ion-item (click)="removerEvento(evento)" menuClose>
+            Remover Evento
+                     </button>
          <button color='light' ion-item (click)="signOut()" menuClose>
             Sair
          </button>
@@ -25,13 +31,14 @@
     </ion-toolbar>
     <ion-list>
        <ion-item-sliding *ngFor="let evento of eventos | async">
-            <button ion-item color='light' (click) = "marcaMapa()" menuClose>
-               {{ evento.eventoNome }}
+            <button ion-item color='light' (click) = "detalharEvento(evento)" menuClose>
+                <h1>{{ evento.eventoNome }}</h1>
+                <p> Local: {{ evento.local }} </p> 
+                <p> Preço: R${{ evento.preco }} </p>
            </button>
         </ion-item-sliding>
     </ion-list>
   </ion-content>
 
 </ion-menu>
-
 <ion-nav #content [root]="rootPage"  swipeBackEnabled="false"></ion-nav>

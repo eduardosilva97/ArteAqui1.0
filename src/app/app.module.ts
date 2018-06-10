@@ -11,7 +11,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
 import { InicioPage } from '../pages/inicio/inicio';
-import { HomePage } from '../pages/home/home';
+import { HomePage } from '../pages/home/homepage/home';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
 import { PerfilPage } from '../pages/perfil/perfil';
@@ -23,6 +23,11 @@ import { AuthService } from '../providers/auth/auth-service';
 import { Geolocation } from '@ionic-native/geolocation';
 import firebase from 'firebase';
 import { EventosService } from '../providers/eventos-service/eventos-service';
+import { MapsService } from '../providers/maps-service/maps-service';
+import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
+import { DetalhaeventoPageModule } from '../pages/detalhaevento/detalhaevento.module';
+import { HomePageModule } from '../pages/home/homepage/home.module';
+import { BuscareventosPage } from '../pages/buscareventos/buscareventos';
 
 
 
@@ -40,10 +45,12 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     InicioPage,
-    HomePage,
+    //HomePage,
     SigninPage,
     SignupPage,
     PerfilPage,
+    BuscareventosPage,
+   // DetalhaPage,
    
     AdicionarEventosPage,
     ResetpasswordPage
@@ -54,6 +61,8 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    DetalhaeventoPageModule,
+    HomePageModule,
     HttpModule
   ],
   bootstrap: [IonicApp],
@@ -64,6 +73,8 @@ const firebaseConfig = {
     SigninPage,
     SignupPage,
     PerfilPage,
+    DetalhaPage,
+    BuscareventosPage,
   
     AdicionarEventosPage,
     ResetpasswordPage
@@ -73,6 +84,7 @@ const firebaseConfig = {
     SplashScreen,
     Geolocation,
     EventosService,
+    MapsService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService
   ]

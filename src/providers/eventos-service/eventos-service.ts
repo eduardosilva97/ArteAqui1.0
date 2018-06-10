@@ -12,7 +12,7 @@ export class EventosService {
 
   constructor(private db: AngularFireDatabase) {}
    
-    public getAll(){
+    getAll(){
       return this.db.list(this.path)
       .snapshotChanges()
       .map(changes => {
@@ -22,33 +22,33 @@ export class EventosService {
       });
     }
 
-    public get(key:string){
+    get(key:string){
       return this.db.object(this.path + key)
       .snapshotChanges()
-      .map(e=> {
+      .map(e => {
         return { key: e.key, ...e.payload.val() };
       })
       
     }
   
    
-    public save(evento: any){
+    save(evento: any){
       return new Promise ((resolve, reject) =>{
         if (evento.key){
           this.db.list(this.path)
-           .update(evento.key, {eventoNome: evento.eventoNome, long: evento.long, lat: evento.lat, preco: evento.preco, local: evento.local})
+           .update(evento.key, {eventoNome: evento.eventoNome, latlng: evento.latlng, preco: evento.preco, local: evento.local})
             .then(()=>resolve())
             .catch((er) => reject(er));
           } else {
             this.db.list(this.path)
-            .push({eventoNome: evento.eventoNome, long: evento.long, lat: evento.lat, preco: evento.preco, local: evento.local})
+            .push({eventoNome: evento.eventoNome, latlng: evento.latlng, preco: evento.preco, local: evento.local})
              .then((result: any)=>resolve(result.key));
           }
       });
      
     }
 
-    public remove (key: string){
+    remove (key: string){
       return this.db.list(this.path).remove(key);
     }
 

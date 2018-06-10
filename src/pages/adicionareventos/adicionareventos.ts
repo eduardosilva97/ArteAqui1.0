@@ -31,8 +31,7 @@ export class AdicionarEventosPage {
     this.form = this.formBuilder.group ({
       key:[this.evento.key],
       eventoNome: [this.evento.nome, Validators.required],
-      long: [this.evento.long, Validators.required],
-      lat: [this.evento.lat, Validators.required],
+      latlng: [this.evento.lat, Validators.required],
       preco: [this.evento.preco, Validators.required],
       local: [this.evento.local, Validators.required],
 

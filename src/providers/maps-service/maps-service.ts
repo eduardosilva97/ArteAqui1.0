@@ -1,42 +1,39 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { ViewChild, ElementRef, Injectable } from '@angular/core';
+
 import { Geolocation } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs/Observable';
 import { EventosService } from '../../providers/eventos-service/eventos-service';
  
 declare var google;
  
-@Component({
-  selector: 'home-page',
-  templateUrl: 'home.html'
-})
-export class HomePage {
+@Injectable()
+export class MapsService {
  
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   eventos: Observable<any>;
   key: any
-  constructor(public navCtrl: NavController, public geolocation: Geolocation, private eventosService: EventosService) {
+  constructor( public geolocation: Geolocation, private eventosService: EventosService) {
+
     function marcaMapa(key: any){
-      const subcribe = this.eventosService.get(this.key)
-        .subscribe((e: any) => {
-          subcribe.unsubscribe();
-  
-          this.eventos = e;
-  
-      let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: new google.maps.LatLng(e.lat, e.long)
-    })
-    let content = "<h4>Information!</h4>";         
-   
-    this.addInfoWindow(marker, content);
-    });
-   
+        const subcribe = this.eventosService.get(this.key)
+          .subscribe((e: any) => {
+            subcribe.unsubscribe();
     
-    }
- 
+            this.eventos = e;
+    
+        let marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(e.lat, e.long)
+      })
+      let content = "<h4>Information!</h4>";         
+     
+      this.addInfoWindow(marker, content);
+      });
+     
+      
+      }
   }
  
   ionViewDidLoad(){
@@ -45,7 +42,7 @@ export class HomePage {
  
   loadMap(){
 
-    this.geolocation.getCurrentPosition().then((position) => {
+   return this.geolocation.getCurrentPosition().then((position) => {
  
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       

@@ -1,0 +1,28 @@
+<!--
+  Generated template for the BuscareventosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Buscar Eventos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+  <ion-list>
+
+ 
+    <ion-item-sliding *ngFor="let evento of eventos | async">
+         <button ion-item color='light' (click) = "marcarEvento(evento)" menuClose>
+             <h1>{{ evento.eventoNome }}</h1>
+             <p> Local: {{ evento.local }} </p> 
+             <p> Preço: R${{ evento.preco }} </p>
+        </button>
+     </ion-item-sliding>
+ </ion-list>
+</ion-content>

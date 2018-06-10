@@ -4,13 +4,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { InicioPage } from '../pages/inicio/inicio';
-import { HomePage } from '../pages/home/home';
+import { HomePage } from '../pages/home/homepage/home';
 import { SignupPage } from '../pages/signup/signup';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { AdicionarEventosPage } from '../pages/adicionareventos/adicionareventos';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireList } from 'angularfire2/database';
+import { BuscareventosPage } from '../pages/buscareventos/buscareventos'
 import { EventosService } from '../providers/eventos-service/eventos-service';
+import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
 
 import { AuthService } from '../providers/auth/auth-service';
 import { Observable } from 'rxjs/Observable';
@@ -22,7 +23,8 @@ export class MyApp {
   nav: Nav;
   rootPage:any = SignupPage;
   eventos: Observable<any>;
-  
+  //homepage: HomePage = new HomePage();
+   
   constructor(private authService: AuthService, platform: Platform, 
     statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth,
      private eventosService: EventosService, private toast: ToastController) {
@@ -80,8 +82,16 @@ export class MyApp {
       })
   }
 
- /* adicionarMarcador(evento: any){
-      HomePage.marcaMapa(evento.key);
-  }*/
+  detalharEvento(evento: string){
+    
+     this.nav.push('DetalhaPage',{evento: evento});
+
+     //console.log(evento.key)
+  }
+
+  buscarEventos(){
+    this.nav.push(BuscareventosPage);
+  }
+
 }
 
