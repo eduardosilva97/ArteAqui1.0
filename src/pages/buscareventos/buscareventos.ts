@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, Searchbar } from 'ionic-angular';
 import { EventosService } from '../../providers/eventos-service/eventos-service';
 import { Observable } from 'rxjs/Observable';
 import { HomePage } from '../home/homepage/home';
@@ -16,6 +16,9 @@ import { HomePage } from '../home/homepage/home';
   templateUrl: 'buscareventos.html',
 })
 export class BuscareventosPage {
+  @ViewChild('searchbar', {read: ElementRef}) searchbarRef: ElementRef;
+  @ViewChild('searchbar') searchbarElement: Searchbar;
+
   eventos: Observable<any>;
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService) {
   
@@ -24,6 +27,10 @@ export class BuscareventosPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad BuscareventosPage');
+  }
+
+  searchAction(texto: any) {
+    let val = texto.target.value;
   }
 
   marcarEvento(evento: any){

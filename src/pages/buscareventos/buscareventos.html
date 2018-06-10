@@ -16,13 +16,15 @@
 <ion-content >
   <ion-list>
 
+    <ion-searchbar #searchbar autocomplete = "on" placeholder="Busca" (ionInput)="searchAction($event)"></ion-searchbar>
  
-    <ion-item-sliding *ngFor="let evento of eventos | async">
-         <button ion-item color='light' (click) = "marcarEvento(evento)" menuClose>
-             <h1>{{ evento.eventoNome }}</h1>
-             <p> Local: {{ evento.local }} </p> 
+ 
+    <ion-item *ngFor="let evento of eventos | async" ng-repeat="filter: busca">
+         <!-- <button ion-item color='light' (click) = "marcarEvento(evento)" menuClose ng-repeat=" filter: busca"> -->
+             <i>{{ evento.eventoNome }}</i>
+             <!-- <p> Local: {{ evento.local }} </p> 
              <p> Preço: R${{ evento.preco }} </p>
-        </button>
-     </ion-item-sliding>
+        </button> -->
+     </ion-item>
  </ion-list>
 </ion-content>
