@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/homepage/home';
+
 /**
- * Generated class for the PerfilPage page.
+ * Generated class for the EditaperfilPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,16 +10,16 @@ import { HomePage } from '../home/homepage/home';
 
 @IonicPage()
 @Component({
-  selector: 'page-perfil',
-  templateUrl: 'perfil.html',
+  selector: 'page-editaperfil',
+  templateUrl: 'editaperfil.html',
 })
-export class PerfilPage {
+export class EditaperfilPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
-  
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PerfilPage');
+    console.log('ionViewDidLoad EditaperfilPage');
   }
 
 }

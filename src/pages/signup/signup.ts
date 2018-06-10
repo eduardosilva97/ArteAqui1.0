@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
 import { HomePage } from '../home/homepage/home';
+import { PerfilPage } from '../perfil/perfil';
  
 @IonicPage()
 @Component({

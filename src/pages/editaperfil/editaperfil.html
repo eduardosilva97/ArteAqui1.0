@@ -1,0 +1,34 @@
+<!--
+  Generated template for the EditaperfilPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>editaperfil</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+    <ion-list>
+    <ion-item>
+        <ion-label stacked>Seu nome</ion-label>
+        <ion-input type="text" name="nome" [(ngModel)]="user.nome" #nome="ngModel" required></ion-input>
+      </ion-item>
+      <ion-item *ngIf="email.errors && (email.dirty || email.touched)" class="text-danger">
+        O campo é obrigatório
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Sua Idade</ion-label>
+        <ion-input type="text" name="idade" [(ngModel)]="user.idade" #idade="ngModel" required></ion-input>
+      </ion-item>
+      <ion-item *ngIf="email.errors && (email.dirty || email.touched)" class="text-danger">
+        O campo é obrigatório
+      </ion-item>
+    </ion-list>
+</ion-content>

@@ -4,7 +4,9 @@ import { EventosService } from '../../providers/eventos-service/eventos-service'
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { HomePage } from '../home/homepage/home';
-
+import { AngularFireList } from 'angularfire2/database';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 @IonicPage()
 @Component({
@@ -13,7 +15,7 @@ import { HomePage } from '../home/homepage/home';
 })
 export class DetalhaPage {
   @ViewChild('content') 
-  preco: string;
+  eventos: Observable<any>;
   
   form = FormGroup;
   
@@ -24,8 +26,8 @@ export class DetalhaPage {
     //      this.detalharEvento(c);
     //   });
 
-    this.preco = this.navParams.get("evento");
-    console.log(this.preco);
+    this.eventos = this.navParams.get("evento") || {};
+     console.log(this.eventos);
 
 
   }
@@ -34,8 +36,8 @@ export class DetalhaPage {
     this.navCtrl.setRoot(HomePage);
   }
 
-  detalharEvento(c: any){ 
-   this.preco = c;
+  detalharEvento(e: any){ 
+   this.eventos = e;
   
   }
 
