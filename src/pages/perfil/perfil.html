@@ -1,9 +1,3 @@
-<!--
-  Generated template for the PerfilPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -13,25 +7,16 @@
 </ion-header>
 
 
-<ion-content>
- 
-  <p text-center><img src ="http://www.freelancers.com.br/perfil_usuarios/padrao.jpg"></p>
+<ion-content padding>
 
-  <h2 text-center>Eduardo Silva</h2>
-  <ion-title>  Idade: 21 </ion-title>
-  <ion-title>  Preferência: Eventos Teatrais </ion-title>
+  <ng-container *ngIf="usuario | async as u">
+    <p text-center><ion-icon name="contact" class="avatar"></ion-icon></p>
 
+    <h2 text-center>{{ u.nome || 'Sem nome' }}</h2>
+    <p text-center>{{ u.email }}</p>
+    <p text-center *ngIf="u.idade">Idade: {{ u.idade }}</p>
 
-  <p></p>
-  <p></p>
-  <p></p>
-
-
-  <button ion-button block color="primary" side="bottom">Editar Perfil</button>
-    
-    
-  
-    
-  
+    <button ion-button block color="primary" (click)="editarPerfil()">Editar Perfil</button>
+  </ng-container>
 
 </ion-content>

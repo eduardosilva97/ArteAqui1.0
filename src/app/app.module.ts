@@ -1,13 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule, List, NavController } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
-
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
 import { InicioPage } from '../pages/inicio/inicio';
@@ -21,49 +17,40 @@ import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 
 import { AuthService } from '../providers/auth/auth-service';
 import { Geolocation } from '@ionic-native/geolocation';
-import firebase from 'firebase';
 import { EventosService } from '../providers/eventos-service/eventos-service';
-import { MapsService } from '../providers/maps-service/maps-service';
 import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
-import { DetalhaeventoPageModule } from '../pages/detalhaevento/detalhaevento.module';
-import { HomePageModule } from '../pages/home/homepage/home.module';
 import { BuscareventosPage } from '../pages/buscareventos/buscareventos';
-import { UsuarioService } from '../providers/usuario-service/usuario-service';
+import { EditaperfilPage } from '../pages/editaperfil/editaperfil';
 
-
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCG3ii_N0KvsAwByeMRjsnbI28Nt3yivbY",
-    authDomain: "arteaqui-a5c63.firebaseapp.com",
-    databaseURL: "https://arteaqui-a5c63.firebaseio.com",
-    projectId: "arteaqui-a5c63",
-    storageBucket: "arteaqui-a5c63.appspot.com",
-    messagingSenderId: "965366698549"
-}
+// Cada página é declarada só no próprio módulo (exigência do build de produção/AoT).
+import { InicioPageModule } from '../pages/inicio/inicio.module';
+import { HomePageModule } from '../pages/home/homepage/home.module';
+import { SigninPageModule } from '../pages/signin/signin.module';
+import { SignupPageModule } from '../pages/signup/signup.module';
+import { PerfilPageModule } from '../pages/perfil/perfil.module';
+import { EditaperfilPageModule } from '../pages/editaperfil/editaperfil.module';
+import { DetalhaeventoPageModule } from '../pages/detalhaevento/detalhaevento.module';
+import { BuscareventosPageModule } from '../pages/buscareventos/buscareventos.module';
+import { AdicionarEventosPageModule } from '../pages/adicionareventos/adicionareventos.module';
+import { ResetpasswordPageModule } from '../pages/resetpassword/resetpassword.module';
 
 @NgModule({
   declarations: [
-    MyApp,
-    InicioPage,
-    //HomePage,
-    SigninPage,
-    SignupPage,
-    PerfilPage,
-    BuscareventosPage,
-   // DetalhaPage,
-   
-    AdicionarEventosPage,
-    ResetpasswordPage
+    MyApp
    ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
-    DetalhaeventoPageModule,
+    InicioPageModule,
     HomePageModule,
+    SigninPageModule,
+    SignupPageModule,
+    PerfilPageModule,
+    EditaperfilPageModule,
+    DetalhaeventoPageModule,
+    BuscareventosPageModule,
+    AdicionarEventosPageModule,
+    ResetpasswordPageModule,
     HttpModule
   ],
   bootstrap: [IonicApp],
@@ -74,9 +61,9 @@ const firebaseConfig = {
     SigninPage,
     SignupPage,
     PerfilPage,
+    EditaperfilPage,
     DetalhaPage,
     BuscareventosPage,
-  
     AdicionarEventosPage,
     ResetpasswordPage
   ],
@@ -85,8 +72,6 @@ const firebaseConfig = {
     SplashScreen,
     Geolocation,
     EventosService,
-    MapsService,
-    UsuarioService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService
   ]

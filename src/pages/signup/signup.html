@@ -23,20 +23,20 @@
         <ion-label stacked>Seu nome</ion-label>
         <ion-input type="text" name="nome" [(ngModel)]="user.nome" #nome="ngModel" required></ion-input>
       </ion-item>
-      <ion-item *ngIf="email.errors && (email.dirty || email.touched)" class="text-danger">
+      <ion-item *ngIf="nome.errors && (nome.dirty || nome.touched)" class="text-danger">
         O campo é obrigatório
       </ion-item>
 
       <ion-item>
         <ion-label stacked>Sua Idade</ion-label>
-        <ion-input type="text" name="idade" [(ngModel)]="user.idade" #idade="ngModel" required></ion-input>
+        <ion-input type="number" name="idade" [(ngModel)]="user.idade" #idade="ngModel" required></ion-input>
       </ion-item>
-      <ion-item *ngIf="email.errors && (email.dirty || email.touched)" class="text-danger">
+      <ion-item *ngIf="idade.errors && (idade.dirty || idade.touched)" class="text-danger">
         O campo é obrigatório
       </ion-item>
 
       <ion-item>
-        <ion-label stacked>Senha</ion-label>
+        <ion-label stacked>Senha (mínimo 6 caracteres)</ion-label>
         <ion-input type="password" name="password" [(ngModel)]="user.password" #password="ngModel" required></ion-input>
       </ion-item>
       <ion-item *ngIf="password.errors && (password.dirty || password.touched)" class="text-danger">

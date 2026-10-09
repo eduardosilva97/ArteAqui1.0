@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/homepage/home';
-/**
- * Generated class for the PerfilPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Observable } from 'rxjs/Observable';
+import { AuthService, Usuario } from '../../providers/auth/auth-service';
+import { EditaperfilPage } from '../editaperfil/editaperfil';
 
 @IonicPage()
 @Component({
@@ -14,12 +10,14 @@ import { HomePage } from '../home/homepage/home';
   templateUrl: 'perfil.html',
 })
 export class PerfilPage {
+  usuario: Observable<Usuario>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private authService: AuthService) {
+    this.usuario = this.authService.user;
   }
-  
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PerfilPage');
+
+  editarPerfil() {
+    this.navCtrl.push(EditaperfilPage);
   }
 
 }

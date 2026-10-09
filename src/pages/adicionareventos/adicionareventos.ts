@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
-import { EventosService } from '../../providers/eventos-service/eventos-service';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { EventosService, lerLatLng } from '../../providers/eventos-service/eventos-service';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @IonicPage()
 @Component({
@@ -14,8 +14,8 @@ export class AdicionarEventosPage {
   form: FormGroup;
   evento: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, 
-    private eventosService: EventosService, private formBuilder: FormBuilder, 
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private eventosService: EventosService, private formBuilder: FormBuilder,
     private toast: ToastController) {
 
   this.evento = this.navParams.data.evento || {};
@@ -27,18 +27,16 @@ export class AdicionarEventosPage {
     this.title = this.navParams.data.evento ? 'Alterando Evento' : 'Novo Evento' ;
   }
 
-  createForm(){ 
+  createForm(){
     this.form = this.formBuilder.group ({
       key:[this.evento.key],
-      eventoNome: [this.evento.nome, Validators.required],
+      eventoNome: [this.evento.eventoNome, Validators.required],
       date: [this.evento.date, Validators.required],
       preco: [this.evento.preco, Validators.required],
       classificacao:[this.evento.classificacao, Validators.required],
       genero:[this.evento.genero, Validators.required],
       local: [this.evento.local, Validators.required],
-      latlng: [this.evento.lat, Validators.required],
-      
-
+      latlng: [this.evento.latlng, [Validators.required, (c: AbstractControl) => lerLatLng(c.value) ? null : { latlng: true }]],
     });
   }
 
@@ -54,7 +52,7 @@ export class AdicionarEventosPage {
         console.error(e);
        });
      }
- 
+
   }
 
 }

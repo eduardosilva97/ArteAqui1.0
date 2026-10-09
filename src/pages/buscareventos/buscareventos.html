@@ -1,9 +1,3 @@
-<!--
-  Generated template for the BuscareventosPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -14,17 +8,16 @@
 
 
 <ion-content >
-  <ion-list>
+  <ion-searchbar placeholder="Nome, local ou gênero" (ionInput)="searchAction($event)"></ion-searchbar>
 
-    <ion-searchbar #searchbar autocomplete = "on" placeholder="Busca" (ionInput)="searchAction($event)"></ion-searchbar>
- 
- 
-    <ion-item *ngFor="let evento of eventos | async" ng-repeat="filter: busca">
-         <!-- <button ion-item color='light' (click) = "marcarEvento(evento)" menuClose ng-repeat=" filter: busca"> -->
-             <i>{{ evento.eventoNome }}</i>
-             <!-- <p> Local: {{ evento.local }} </p> 
-             <p> Preço: R${{ evento.preco }} </p>
-        </button> -->
-     </ion-item>
- </ion-list>
+  <ion-list>
+    <button ion-item *ngFor="let evento of eventos" (click)="marcarEvento(evento)">
+      <h2>{{ evento.eventoNome }}</h2>
+      <p> Local: {{ evento.local }} </p>
+      <p> Preço: {{ evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis' }} </p>
+    </button>
+    <ion-item *ngIf="!eventos.length" text-wrap>
+      Nenhum evento encontrado.
+    </ion-item>
+  </ion-list>
 </ion-content>

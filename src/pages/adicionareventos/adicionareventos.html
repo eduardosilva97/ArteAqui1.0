@@ -51,7 +51,10 @@
       
       <ion-item>
             <ion-label stacked>Latitude e Longitude</ion-label>
-            <ion-input type="text" formControlName="latlng"></ion-input>
+            <ion-input type="text" formControlName="latlng" placeholder="-12.9714, -38.5108"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="form.get('latlng').errors?.latlng && form.get('latlng').touched" class="text-danger">
+            Use o formato "latitude, longitude"
       </ion-item>
       
            
@@ -61,6 +64,6 @@
             
 
   </form>
-  <button ion-button block type="submit" [disabled] = "!form.valid" (click)="adicionarEvento()">Adicionar Evento</button>
+  <button ion-button block type="submit" [disabled] = "!form.valid" (click)="adicionarEvento()">{{ evento.key ? 'Salvar Alterações' : 'Adicionar Evento' }}</button>
   
 </ion-content>

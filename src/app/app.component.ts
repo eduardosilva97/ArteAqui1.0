@@ -5,10 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { InicioPage } from '../pages/inicio/inicio';
 import { HomePage } from '../pages/home/homepage/home';
-import { SignupPage } from '../pages/signup/signup';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { AdicionarEventosPage } from '../pages/adicionareventos/adicionareventos';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { BuscareventosPage } from '../pages/buscareventos/buscareventos'
 import { EventosService } from '../providers/eventos-service/eventos-service';
 import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
@@ -19,27 +17,17 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  @ViewChild('content') 
+  @ViewChild('content')
   nav: Nav;
-  rootPage:any = SignupPage;
+  rootPage:any;
   eventos: Observable<any>;
-  //homepage: HomePage = new HomePage();
-   
-  constructor(private authService: AuthService, platform: Platform, 
-    statusBar: StatusBar, splashScreen: SplashScreen, afAuth: AngularFireAuth,
-     private eventosService: EventosService, private toast: ToastController) {
-      
-      this.eventos = this.eventosService.getAll();
 
-    const authObserver = afAuth.authState.subscribe(user => {
-      if(user){
-        this.rootPage = HomePage;
-        authObserver.unsubscribe();
-      }else{
-        this.rootPage = InicioPage;
-        authObserver.unsubscribe;
-          }
-    });
+  constructor(private authService: AuthService, platform: Platform,
+    statusBar: StatusBar, splashScreen: SplashScreen,
+     private eventosService: EventosService, private toast: ToastController) {
+
+      this.eventos = this.eventosService.getAll();
+      this.rootPage = this.authService.usuarioAtual ? HomePage : InicioPage;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -47,9 +35,9 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
-    
+
   }
-  
+
   signOut(){
     this.authService.signOut()
     .then(() => {
@@ -69,7 +57,7 @@ export class MyApp {
   }
 
   editarEvento(evento: any){
-    this.nav.push('AdicionarEventosPage', { eventos: evento});
+    this.nav.push(AdicionarEventosPage, { evento: evento});
   }
 
   removerEvento(key: string){
@@ -82,11 +70,8 @@ export class MyApp {
       })
   }
 
-  detalharEvento(evento: string){
-    
-     this.nav.push('DetalhaPage',{evento: evento});
-
-     //console.log(evento.key)
+  detalharEvento(evento: any){
+     this.nav.push(DetalhaPage, {evento: evento});
   }
 
   buscarEventos(){
@@ -94,4 +79,3 @@ export class MyApp {
   }
 
 }
-

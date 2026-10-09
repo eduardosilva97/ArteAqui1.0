@@ -11,26 +11,22 @@
 
 
 <ion-list>
-    
-    <ion-item>Evento:</ion-item>
-    <li></li>
-    <ion-item>Data:</ion-item>
-    <p></p>
-    <ion-item>Preço:</ion-item>
-    <p></p>
-    <ion-item>Local:</ion-item>
-    <p></p>
-    <ion-item>Gênero:</ion-item>
-    <p></p>
-    <ion-item>Classificação Indicativa:</ion-item>
-    <p></p>
+
+    <ion-item>Evento: <h2>{{ evento.eventoNome }}</h2></ion-item>
+    <ion-item>Data: <p>{{ evento.date }}</p></ion-item>
+    <ion-item>Preço: <p>{{ evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis' }}</p></ion-item>
+    <ion-item>Local: <p>{{ evento.local }}</p></ion-item>
+    <ion-item>Gênero: <p>{{ evento.genero }}</p></ion-item>
+    <ion-item>Classificação Indicativa: <p>{{ evento.classificacao > 0 ? evento.classificacao + ' anos' : 'Livre' }}</p></ion-item>
 
     <ion-item><button ion-button block (click) = "marcaMapa()"> Marcar no Mapa </button></ion-item>
+    <ion-item>
+      <button ion-button block outline (click)="editar()">Editar</button>
+      <button ion-button block outline color="danger" (click)="remover()">Remover</button>
+    </ion-item>
 
 </ion-list>
 
 
 
 </ion-content>
-<ion-nav #content swipeBackEnabled="false"></ion-nav>
-

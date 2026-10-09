@@ -4,7 +4,6 @@ import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
 import { HomePage } from '../home/homepage/home';
-import { PerfilPage } from '../perfil/perfil';
  
 @IonicPage()
 @Component({
@@ -39,7 +38,9 @@ export class SignupPage {
         }else if(error.code == 'auth/operation-not-allowed'){
           toast.setMessage('Não é possivel criar usuário');
         }else if(error.code == 'auth/weak-password'){
-          toast.setMessage('Sua senha é muito fraca');
+          toast.setMessage('Sua senha é muito fraca: use pelo menos 6 caracteres');
+        }else{
+          toast.setMessage('Não foi possível criar a conta');
         }
        
         toast.present();

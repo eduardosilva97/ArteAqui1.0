@@ -35,16 +35,19 @@ export class SigninPage {
       })
       .catch((error: any) => {
         let toast = this.toastCtrl.create({duration: 3000, position: 'bottom' });
-        if(error.code = 'auth/invalid-email'){
+        if(error.code == 'auth/invalid-email'){
           toast.setMessage('O email inserido não é válido');
-        }else if(error.code = 'auth/user-disabled'){
+        }else if(error.code == 'auth/user-disabled'){
           toast.setMessage('O usuário cadastrado neste email está desabilitado');
-        }else if(error.code = 'auth/user-not-found'){
+        }else if(error.code == 'auth/user-not-found'){
           toast.setMessage('Email ou senha incorreto(s)');
-        }else if(error.code = 'auth/wrong-password'){
+        }else if(error.code == 'auth/wrong-password'){
           toast.setMessage('Email ou senha incorreto(s)');
+        }else{
+          toast.setMessage('Não foi possível entrar');
         }
 
+        toast.present();
       });
     }
   }

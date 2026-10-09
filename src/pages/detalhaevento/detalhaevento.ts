@@ -1,12 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { EventosService } from '../../providers/eventos-service/eventos-service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { HomePage } from '../home/homepage/home';
-import { AngularFireList } from 'angularfire2/database';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { AdicionarEventosPage } from '../adicionareventos/adicionareventos';
 
 @IonicPage()
 @Component({
@@ -14,31 +11,36 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   templateUrl: 'detalhaevento.html',
 })
 export class DetalhaPage {
-  @ViewChild('content') 
-  eventos: Observable<any>;
-  
-  form = FormGroup;
-  
-  constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService, private formBuilder: FormBuilder) {
-    // const subcribe = this.eventosService.get(this.navParams.data.key)
-    //   .subscribe((c: any)=>{
-    //     subcribe.unsubscribe();
-    //      this.detalharEvento(c);
-    //   });
+  evento: any;
+  private inscricao: Subscription;
 
-    this.eventos = this.navParams.get("evento") || {};
-     console.log(this.eventos);
+  constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService, private toast: ToastController) {
+    this.evento = this.navParams.get("evento") || {};
+    // Mantém a tela atualizada depois de uma edição.
+    this.inscricao = this.eventosService.get(this.evento.key).subscribe(atual => {
+      if (atual) {
+        this.evento = atual;
+      }
+    });
+  }
 
-
+  ngOnDestroy(){
+    this.inscricao.unsubscribe();
   }
 
   marcaMapa(){
-    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot(HomePage, { evento: this.evento });
   }
 
-  detalharEvento(e: any){ 
-   this.eventos = e;
-  
+  editar(){
+    this.navCtrl.push(AdicionarEventosPage, { evento: this.evento });
+  }
+
+  remover(){
+    this.eventosService.remove(this.evento.key).then(() => {
+      this.toast.create({ message: "Evento removido com sucesso.", duration: 3000}).present();
+      this.navCtrl.pop();
+    });
   }
 
 }
