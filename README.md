@@ -1,31 +1,44 @@
 # ArteAqui
 
-Mapa cultural de Salvador: teatros, museus, festas populares, carnaval, música, capoeira, feiras, patrimônio e mais. Projeto de faculdade de 2018, feito por Eduardo Silva e Guilherme (guigacmt), em Ionic 3 + Angular 5.
+Mapa cultural de Salvador. Projeto de faculdade de 2018 (Eduardo Silva e Guilherme), feito em Ionic 3 + Angular 5 e atualizado em 2026.
 
-## O que dá para fazer
+## O que mudou na atualização de 2026
 
-- Abrir direto no mapa, sem precisar de conta
-- Ver mais de 330 pontos e atividades culturais já marcados, cada um com marcador na cor e com o ícone da sua categoria. Pontos próximos são agrupados
-- Filtrar o mapa por categoria (festa popular, carnaval, música, dança, capoeira, teatro, cinema, museu, galeria, centro cultural, biblioteca, literatura, feira, patrimônio, monumento)
-- Buscar por nome, bairro, categoria ou descrição e ver os detalhes (quando acontece, preço, fonte)
-- Cadastrar, editar e remover seus próprios eventos (aparecem em "Meus eventos" no menu)
-- Opcional: criar conta e entrar com e-mail e senha, ver e editar o perfil
+- **Voltou a rodar.** O projeto Firebase e a chave do Google Maps de 2018 não funcionavam mais.
+- **Sem servidor.** Contas e eventos cadastrados ficam salvos no próprio navegador (`localStorage`).
+- **Mapa com OpenStreetMap** (Leaflet), que não precisa de chave de API.
+- **Sem login obrigatório.** O app abre direto no mapa; criar conta é opcional.
+- **332 pontos culturais já marcados:** teatros, museus, cinemas, bibliotecas, igrejas e monumentos, além de festas populares, circuitos do carnaval, ensaios, rodas de capoeira, feiras e festivais, com data, preço e fonte.
+- **Marcadores por categoria,** cada uma com cor e ícone próprios. Os pontos próximos ficam agrupados, e uma barra no topo filtra o mapa.
+- **Telas que estavam pela metade foram concluídas:** detalhes, busca, editar e remover evento, perfil.
+- **Responsivo.** Funciona bem no celular, no tablet e no computador.
+- **Login com Facebook e Google:** só mostra um aviso, porque depende de um servidor de autenticação.
 
-Não há servidor: contas e eventos cadastrados ficam no `localStorage` do navegador. O login com Facebook e Google mostra um aviso, porque depende de um servidor (o Firebase de 2018 foi desativado).
+Fontes dos dados e como atualizá-los: [`dados/README.md`](dados/README.md).
 
-Os dados culturais vêm do OpenStreetMap e de uma pesquisa de atividades recorrentes. Fontes, licença e como regenerar estão em [`dados/README.md`](dados/README.md).
+## Como rodar na sua máquina
 
-## Como rodar
+O projeto usa ferramentas de 2018 e precisa do **Node 8**, que pode ficar ao lado da versão de Node já instalada.
 
-O projeto usa ferramentas de 2018 e precisa do **Node 8** (o `node-sass` dessa época não instala em versões mais novas). Um Node 8 portátil resolve sem mexer no Node já instalado:
+1. Baixe o Node 8:
+   - **Windows:** baixe [node-v8.17.0-win-x64.zip](https://nodejs.org/dist/v8.17.0/node-v8.17.0-win-x64.zip) e descompacte, por exemplo, em `C:\node8`.
+   - **Mac/Linux:** use o [nvm](https://github.com/nvm-sh/nvm): `nvm install 8 && nvm use 8`.
+2. Clone o repositório e entre na pasta:
+   ```bash
+   git clone https://github.com/eduardosilva97/ArteAqui1.0.git
+   cd ArteAqui1.0
+   ```
+3. Coloque o Node 8 no PATH só para este terminal. No Windows, com o Git Bash:
+   ```bash
+   export PATH="/c/node8/node-v8.17.0-win-x64:$PATH"
+   ```
+4. Instale as dependências e rode:
+   ```bash
+   npm install
+   npm run ionic:serve
+   ```
+5. Abra http://localhost:8100.
 
-```bash
-# Windows (Git Bash), com o Node 8 descompactado em C:\dev\tools
-export PATH="/c/dev/tools/node-v8.17.0-win-x64:$PATH"
-npm install
-npm run ionic:serve      # abre em http://localhost:8100
-```
+## Publicar no GitHub Pages
 
-Download do Node 8: https://nodejs.org/dist/v8.17.0/ (arquivo `node-v8.17.0-win-x64.zip`).
-
-Build de produção: `npm run build -- --prod` (gera a pasta `www/`).
+`npm run publicar` gera a versão de produção e envia a pasta `www/` para o branch `gh-pages`. Na primeira vez, o dono do repositório precisa ativar o Pages em **Settings → Pages → Deploy from a branch → `gh-pages` / `(root)`**.
