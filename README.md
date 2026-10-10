@@ -2,6 +2,8 @@
 
 Mapa cultural de Salvador. Projeto de faculdade de 2018 (Eduardo Silva e Guilherme), feito em Ionic 3 + Angular 5 e atualizado em 2026.
 
+**No ar:** https://guilhermecmt.github.io/ArteAqui1.0/
+
 ## O que mudou na atualização de 2026
 
 - **Voltou a rodar.** O projeto Firebase e a chave do Google Maps de 2018 não funcionavam mais.
