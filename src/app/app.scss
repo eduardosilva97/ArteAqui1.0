@@ -14,3 +14,125 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+// Conteúdo centralizado e com largura máxima em telas grandes (tablet/computador).
+.conteudo-limitado {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+// Fundo das telas de entrada (início, login, cadastro): cobre a tela inteira em qualquer tamanho.
+.fundo-entrada {
+  background: #3b6fb6 url('../assets/img/background.jpg') center / cover no-repeat;
+
+  .scroll-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.cartao-entrada {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .92);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .25);
+
+  .list-md, .list-ios {
+    margin-bottom: 16px;
+  }
+
+  .item {
+    background: transparent;
+  }
+}
+
+// Marcadores do mapa: alfinete com a cor e o ícone da categoria.
+.marcador-cultural {
+  background: none;
+  border: 0;
+
+  .pino {
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      transform: rotate(45deg);
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+    }
+  }
+}
+
+.grupo-marcadores {
+  background: rgba(72, 138, 255, .35);
+  border-radius: 50%;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    border-radius: 50%;
+    background: #488aff;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+  }
+}
+
+.popup-cultural {
+  h4 {
+    margin: 8px 0 4px;
+    font-size: 1.6rem;
+  }
+
+  p {
+    margin: 2px 0 !important;
+  }
+
+  .selo {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.1rem;
+  }
+
+  .ver-detalhes {
+    margin-top: 8px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    background: #488aff;
+    color: #fff;
+    font-weight: 500;
+  }
+}
+
+// Selo de categoria usado nas listas e nos detalhes.
+.selo-categoria {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+
+  ion-icon {
+    vertical-align: middle;
+  }
+}

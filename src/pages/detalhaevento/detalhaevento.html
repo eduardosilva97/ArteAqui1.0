@@ -2,31 +2,37 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Detalhes do Evento</ion-title>
+    <ion-title>Detalhes</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
-
+<div class="conteudo-limitado">
 
 <ion-list>
 
-    <ion-item>Evento: <h2>{{ evento.eventoNome }}</h2></ion-item>
-    <ion-item>Data: <p>{{ evento.date }}</p></ion-item>
-    <ion-item>Preço: <p>{{ evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis' }}</p></ion-item>
-    <ion-item>Local: <p>{{ evento.local }}</p></ion-item>
-    <ion-item>Gênero: <p>{{ evento.genero }}</p></ion-item>
-    <ion-item>Classificação Indicativa: <p>{{ evento.classificacao > 0 ? evento.classificacao + ' anos' : 'Livre' }}</p></ion-item>
+    <ion-item text-wrap>
+      <span class="selo-categoria" [style.background]="cat.cor"><ion-icon [name]="'md-' + cat.icone"></ion-icon> {{ cat.nome }}</span>
+      <h1>{{ evento.eventoNome }}</h1>
+      <p *ngIf="evento.descricao" class="descricao">{{ evento.descricao }}</p>
+    </ion-item>
+    <ion-item text-wrap *ngIf="evento.local">Local: <p>{{ evento.local }}<span *ngIf="evento.aproximado"> (localização aproximada no mapa)</span></p></ion-item>
+    <ion-item text-wrap *ngIf="evento.quando || evento.date">Quando: <p>{{ evento.quando || evento.date }}</p></ion-item>
+    <ion-item text-wrap *ngIf="preco">Preço: <p>{{ preco }}</p></ion-item>
+    <ion-item *ngIf="evento.classificacao !== undefined && evento.classificacao !== null && evento.classificacao !== ''">Classificação Indicativa: <p>{{ evento.classificacao > 0 ? evento.classificacao + ' anos' : 'Livre' }}</p></ion-item>
+    <ion-item text-wrap *ngIf="evento.site">Site: <p><a [href]="evento.site" target="_blank" rel="noopener">{{ evento.site }}</a></p></ion-item>
 
     <ion-item><button ion-button block (click) = "marcaMapa()"> Marcar no Mapa </button></ion-item>
-    <ion-item>
+    <ion-item *ngIf="!evento.fixo">
       <button ion-button block outline (click)="editar()">Editar</button>
       <button ion-button block outline color="danger" (click)="remover()">Remover</button>
+    </ion-item>
+    <ion-item text-wrap *ngIf="evento.fonte" class="fonte">
+      <p>Fonte: <a [href]="evento.fonte" target="_blank" rel="noopener">{{ evento.fonte.indexOf('openstreetmap.org') >= 0 ? 'OpenStreetMap' : evento.fonte }}</a></p>
     </ion-item>
 
 </ion-list>
 
-
-
+</div>
 </ion-content>

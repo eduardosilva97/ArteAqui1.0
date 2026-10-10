@@ -1,15 +1,19 @@
 # ArteAqui
 
-App de eventos culturais em Salvador, mostrados num mapa. Projeto de faculdade de 2018, feito por Eduardo Silva e Guilherme (guigacmt), em Ionic 3 + Angular 5.
+Mapa cultural de Salvador: teatros, museus, festas populares, carnaval, música, capoeira, feiras, patrimônio e mais. Projeto de faculdade de 2018, feito por Eduardo Silva e Guilherme (guigacmt), em Ionic 3 + Angular 5.
 
 ## O que dá para fazer
 
-- Criar conta e entrar com e-mail e senha
-- Ver os eventos num mapa (OpenStreetMap), centralizado na sua localização
-- Listar, buscar (por nome, local ou gênero), ver detalhes, adicionar, editar e remover eventos
-- Ver e editar o perfil
+- Abrir direto no mapa, sem precisar de conta
+- Ver mais de 330 pontos e atividades culturais já marcados, cada um com marcador na cor e com o ícone da sua categoria. Pontos próximos são agrupados
+- Filtrar o mapa por categoria (festa popular, carnaval, música, dança, capoeira, teatro, cinema, museu, galeria, centro cultural, biblioteca, literatura, feira, patrimônio, monumento)
+- Buscar por nome, bairro, categoria ou descrição e ver os detalhes (quando acontece, preço, fonte)
+- Cadastrar, editar e remover seus próprios eventos (aparecem em "Meus eventos" no menu)
+- Opcional: criar conta e entrar com e-mail e senha, ver e editar o perfil
 
-Por enquanto não há servidor: contas e eventos ficam guardados no `localStorage` do navegador. Na primeira abertura aparecem alguns eventos de exemplo. O login com Facebook e Google fica desativado até existir um servidor.
+Não há servidor: contas e eventos cadastrados ficam no `localStorage` do navegador. O login com Facebook e Google mostra um aviso, porque depende de um servidor (o Firebase de 2018 foi desativado).
+
+Os dados culturais vêm do OpenStreetMap e de uma pesquisa de atividades recorrentes. Fontes, licença e como regenerar estão em [`dados/README.md`](dados/README.md).
 
 ## Como rodar
 

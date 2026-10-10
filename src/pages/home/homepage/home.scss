@@ -1,16 +1,59 @@
-.ios, .md {
- 
-    home-page {
- 
-      .scroll {
-        height: 100%
-      }
- 
-      #map {
-        width: 100%;
-        height: 100%;
-      }
- 
+home-page {
+
+  .scroll-content {
+    overflow: hidden;
+  }
+
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  // Barra de categorias por cima do mapa, rolando na horizontal no celular.
+  .filtros {
+    position: absolute;
+    z-index: 500;
+    top: 8px;
+    left: 0;
+    right: 0;
+    padding: 0 8px 6px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
- 
+  }
+
+  .filtro {
+    flex: 0 0 auto;
+    margin-right: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    border: 2px solid #9e9e9e;
+    background: #fff;
+    color: #333;
+    font-size: 1.3rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+
+    ion-icon {
+      font-size: 1.5rem;
+      vertical-align: middle;
+      margin-right: 2px;
+    }
+
+    &.ativo {
+      color: #fff;
+      background: #488aff;
+      border-color: #488aff;
+    }
+  }
 }

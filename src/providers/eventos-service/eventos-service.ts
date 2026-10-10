@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/map';
+import { categoria } from './categorias';
 
 /*
-  Eventos guardados no localStorage do navegador, sem servidor.
-  Na primeira vez, o app começa com alguns eventos de exemplo em Salvador.
+  Duas fontes de eventos, sem servidor:
+  - o catálogo de atividades culturais de Salvador (assets/data/locais-culturais.json), só leitura;
+  - os eventos que a pessoa cadastra, guardados no localStorage do navegador.
 */
 
 const CHAVE_EVENTOS = 'arteaqui.eventos';
+const CATALOGO = 'assets/data/locais-culturais.json';
 
 // Converte o campo "Latitude e Longitude" do formulário ("-12.97, -38.51") em [lat, lng].
 export function lerLatLng(texto: string): [number, number] {
@@ -18,35 +24,52 @@ export function lerLatLng(texto: string): [number, number] {
   return [partes[0], partes[1]];
 }
 
-const EVENTOS_EXEMPLO = [
-  { key: 'ex1', eventoNome: 'Peça Teatral', local: 'Teatro Castro Alves', genero: 'Teatro', preco: 40, classificacao: 12, date: '2026-11-14', latlng: '-12.9869, -38.5215' },
-  { key: 'ex2', eventoNome: 'Exposição de Arte', local: 'Museu de Arte Moderna da Bahia', genero: 'Artes visuais', preco: 0, classificacao: 0, date: '2026-11-07', latlng: '-12.9800, -38.5208' },
-  { key: 'ex3', eventoNome: 'Roda de Samba', local: 'Pelourinho', genero: 'Música', preco: 20, classificacao: 0, date: '2026-11-21', latlng: '-12.9714, -38.5108' },
-  { key: 'ex4', eventoNome: 'Sarau de Poesia', local: 'Rio Vermelho', genero: 'Literatura', preco: 10, classificacao: 14, date: '2026-11-28', latlng: '-13.0112, -38.4904' },
-  { key: 'ex5', eventoNome: 'Mostra de Dança', local: 'Barra', genero: 'Dança', preco: 30, classificacao: 0, date: '2026-12-05', latlng: '-13.0103, -38.5326' },
-];
+// Preço para exibição: número (R$ / Grátis) ou o texto do catálogo ("gratuito", "a partir de R$ 20"...).
+export function textoPreco(preco: any): string {
+  if (preco === null || preco === undefined || preco === '') {
+    return '';
+  }
+  if (!isNaN(Number(preco))) {
+    return Number(preco) > 0 ? 'R$ ' + preco : 'Grátis';
+  }
+  return String(preco);
+}
 
 @Injectable()
 export class EventosService {
 
-  private eventos: BehaviorSubject<any[]>;
+  private catalogo = new BehaviorSubject<any[]>([]);
+  private meus: BehaviorSubject<any[]>;
 
-  constructor() {
-    this.eventos = new BehaviorSubject<any[]>(this.ler());
+  constructor(private http: Http) {
+    this.meus = new BehaviorSubject<any[]>(this.ler());
+    this.http.get(CATALOGO)
+      .map(res => res.json())
+      .subscribe(
+        lista => this.catalogo.next(lista.map(e => ({ ...e, fixo: true }))),
+        erro => console.error('Não foi possível carregar o catálogo cultural', erro)
+      );
   }
 
-    getAll(){
-      return this.eventos.asObservable();
+    // Catálogo + eventos da pessoa
+    getAll(): Observable<any[]> {
+      return Observable.combineLatest(this.catalogo, this.meus, (a, b) => a.concat(b));
+    }
+
+    getMeus(): Observable<any[]> {
+      return this.meus.asObservable();
     }
 
     get(key:string){
-      return this.eventos.asObservable()
-        .map(lista => lista.filter(e => e.key === key)[0]);
+      return this.getAll().map(lista => lista.filter(e => e.key === key)[0]);
     }
 
     save(evento: any){
-      const dados = {eventoNome: evento.eventoNome, latlng: evento.latlng, date: evento.date, preco: evento.preco, classificacao: evento.classificacao, genero: evento.genero, local: evento.local};
-      const lista = this.eventos.getValue();
+      const cat = evento.categoria || 'evento';
+      const dados = {eventoNome: evento.eventoNome, categoria: cat, genero: categoria(cat).nome, descricao: evento.descricao || '',
+        quando: evento.quando || '', latlng: evento.latlng, date: evento.date || '', preco: evento.preco,
+        classificacao: evento.classificacao, local: evento.local};
+      const lista = this.meus.getValue();
       if (evento.key){
         this.gravar(lista.map(e => e.key === evento.key ? { key: evento.key, ...dados } : e));
         return Promise.resolve(evento.key);
@@ -57,22 +80,23 @@ export class EventosService {
     }
 
     remove (key: string){
-      this.gravar(this.eventos.getValue().filter(e => e.key !== key));
+      this.gravar(this.meus.getValue().filter(e => e.key !== key));
       return Promise.resolve();
     }
 
     private ler(): any[] {
       try {
-        const salvos = localStorage.getItem(CHAVE_EVENTOS);
-        return salvos ? JSON.parse(salvos) : EVENTOS_EXEMPLO;
+        const salvos = JSON.parse(localStorage.getItem(CHAVE_EVENTOS)) || [];
+        // Os exemplos fictícios da versão anterior (ex1..ex5) deram lugar ao catálogo real.
+        return salvos.filter(e => !/^ex\d$/.test(e.key));
       } catch (e) {
-        return EVENTOS_EXEMPLO;
+        return [];
       }
     }
 
     private gravar(lista: any[]) {
       localStorage.setItem(CHAVE_EVENTOS, JSON.stringify(lista));
-      this.eventos.next(lista);
+      this.meus.next(lista);
     }
 
 }

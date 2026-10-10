@@ -1,10 +1,12 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Subscription } from 'rxjs/Subscription';
-import { EventosService, lerLatLng } from '../../../providers/eventos-service/eventos-service';
+import { EventosService, lerLatLng, textoPreco } from '../../../providers/eventos-service/eventos-service';
+import { CATEGORIAS, Categoria, categoria } from '../../../providers/eventos-service/categorias';
+import { DetalhaPage } from '../../detalhaevento/detalhaevento';
 
-// Leaflet + OpenStreetMap, carregado em index.html (não precisa de chave de API).
+// Leaflet + Leaflet.markercluster + OpenStreetMap, carregados em index.html (não precisa de chave de API).
 declare var L;
 
 const CENTRO_SALVADOR: [number, number] = [-12.9777, -38.5016];
@@ -20,15 +22,25 @@ export class HomePage {
   map: any;
   marcadores: any;
   eventoEmFoco: any;
+  categorias: Categoria[] = [];
+  filtro: string = null;
+  private eventos: any[] = [];
+  private visiveis: any[] = [];
   private inscricao: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public geolocation: Geolocation, private eventosService: EventosService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public geolocation: Geolocation,
+    private eventosService: EventosService, private zone: NgZone) {
     this.eventoEmFoco = this.navParams.data.evento;
   }
 
   ionViewDidLoad(){
     this.loadMap();
-    this.inscricao = this.eventosService.getAll().subscribe(eventos => this.marcaMapa(eventos));
+    this.inscricao = this.eventosService.getAll().subscribe(eventos => {
+      this.eventos = eventos;
+      // Só mostra na barra as categorias que têm algum ponto.
+      this.categorias = CATEGORIAS.filter(c => eventos.some(e => categoria(e.categoria).chave === c.chave));
+      this.marcaMapa();
+    });
   }
 
   ionViewDidEnter(){
@@ -44,57 +56,110 @@ export class HomePage {
   }
 
   loadMap(){
-    this.map = L.map(this.mapElement.nativeElement).setView(CENTRO_SALVADOR, 13);
+    this.map = L.map(this.mapElement.nativeElement, { zoomControl: false }).setView(CENTRO_SALVADOR, 13);
+    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; colaboradores do OpenStreetMap'
     }).addTo(this.map);
-    this.marcadores = L.featureGroup().addTo(this.map);
+    this.marcadores = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 45,
+      iconCreateFunction: grupo => L.divIcon({
+        html: '<span>' + grupo.getChildCount() + '</span>',
+        className: 'grupo-marcadores',
+        iconSize: [40, 40]
+      })
+    }).addTo(this.map);
 
     if (this.eventoEmFoco) {
       return;
     }
-    this.geolocation.getCurrentPosition().then((position) => {
-      this.map.setView([position.coords.latitude, position.coords.longitude], 15);
+    this.geolocation.getCurrentPosition({ timeout: 10000 }).then((position) => {
+      const aqui: [number, number] = [position.coords.latitude, position.coords.longitude];
+      // Só centraliza na pessoa se ela estiver em Salvador e arredores.
+      if (this.map.distance(aqui, CENTRO_SALVADOR) < 40000) {
+        this.map.setView(aqui, 15);
+      }
     }, (err) => {
       console.log(err);
     });
   }
 
-  marcaMapa(eventos: any[]){
+  filtrar(chave: string){
+    this.filtro = this.filtro === chave ? null : chave;
+    this.marcaMapa();
+    this.marcaMapaTeste();
+  }
+
+  marcaMapa(){
     if (!this.marcadores) {
       return;
     }
     this.marcadores.clearLayers();
-    eventos.forEach(evento => {
+    let foco = null;
+    const novos = [];
+    this.eventos.forEach(evento => {
       const posicao = lerLatLng(evento.latlng);
-      if (!posicao) {
+      const cat = categoria(evento.categoria);
+      if (!posicao || (this.filtro && cat.chave !== this.filtro)) {
         return;
       }
-      const marker = L.marker(posicao).addTo(this.marcadores);
-      this.addInfoWindow(marker, this.conteudo(evento));
+      const marker = L.marker(posicao, { icon: this.icone(cat), title: evento.eventoNome });
+      this.addInfoWindow(marker, this.conteudo(evento, cat));
+      novos.push(marker);
       if (this.eventoEmFoco && this.eventoEmFoco.key === evento.key) {
-        this.map.setView(posicao, 16);
-        marker.openPopup();
+        foco = marker;
       }
     });
+    this.marcadores.addLayers(novos);
+    this.visiveis = novos.map(m => m.getLatLng());
+    if (foco) {
+      this.eventoEmFoco = null;
+      this.marcadores.zoomToShowLayer(foco, () => foco.openPopup());
+    }
   }
 
-  // Botão "Marcadores": enquadra todos os eventos no mapa.
+  // Botão "Marcadores": enquadra todos os pontos visíveis no mapa.
+  // (Calcula pelos pontos atuais: o getBounds do grupo guarda os limites de antes do filtro.)
   marcaMapaTeste(){
-    if (this.marcadores && this.marcadores.getLayers().length) {
-      this.map.fitBounds(this.marcadores.getBounds(), { padding: [40, 40] });
+    if (this.visiveis.length) {
+      this.map.fitBounds(L.latLngBounds(this.visiveis), { padding: [50, 50], maxZoom: 16 });
     }
   }
 
   addInfoWindow(marker, content){
-    marker.bindPopup(content);
+    // A folga no topo evita que o popup fique escondido atrás da barra de categorias.
+    marker.bindPopup(content, { maxWidth: 260, minWidth: 200, autoPanPaddingTopLeft: L.point(10, 70) });
   }
 
-  private conteudo(evento: any): string {
-    const preco = evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis';
-    return '<h4>' + this.escapar(evento.eventoNome) + '</h4>' +
-      '<p>' + this.escapar(evento.local) + '<br>' + this.escapar(evento.date) + ' · ' + preco + '</p>';
+  // Alfinete na cor da categoria, com o ícone dela no meio.
+  private icone(cat: Categoria) {
+    return L.divIcon({
+      className: 'marcador-cultural',
+      html: '<div class="pino" style="background:' + cat.cor + '"><ion-icon class="ion-md-' + cat.icone + '"></ion-icon></div>',
+      iconSize: [34, 42],
+      iconAnchor: [17, 42],
+      popupAnchor: [0, -38]
+    });
+  }
+
+  private conteudo(evento: any, cat: Categoria): HTMLElement {
+    const div = document.createElement('div');
+    div.className = 'popup-cultural';
+    const preco = textoPreco(evento.preco);
+    div.innerHTML =
+      '<span class="selo" style="background:' + cat.cor + '"><ion-icon class="ion-md-' + cat.icone + '"></ion-icon> ' + this.escapar(cat.nome) + '</span>' +
+      '<h4>' + this.escapar(evento.eventoNome) + '</h4>' +
+      (evento.local ? '<p>' + this.escapar(evento.local) + '</p>' : '') +
+      (evento.quando || evento.date ? '<p><b>Quando:</b> ' + this.escapar(evento.quando || evento.date) + '</p>' : '') +
+      (preco ? '<p><b>Preço:</b> ' + this.escapar(preco) + '</p>' : '');
+    const botao = document.createElement('button');
+    botao.className = 'ver-detalhes';
+    botao.textContent = 'Ver detalhes';
+    botao.addEventListener('click', () => this.zone.run(() => this.navCtrl.push(DetalhaPage, { evento: evento })));
+    div.appendChild(botao);
+    return div;
   }
 
   private escapar(texto: any): string {

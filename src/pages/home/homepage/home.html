@@ -13,5 +13,13 @@
     </ion-navbar>
   </ion-header>
   <ion-content>
-    <div style="width:100%; height:100%" #map id="map"></div>
+    <div class="filtros">
+      <button class="filtro" [class.ativo]="!filtro" (click)="filtrar(null)">Todos</button>
+      <button *ngFor="let c of categorias" class="filtro" [class.ativo]="filtro === c.chave"
+        [style.border-color]="c.cor" [style.background]="filtro === c.chave ? c.cor : null" (click)="filtrar(c.chave)">
+        <ion-icon [name]="'md-' + c.icone" [style.color]="filtro === c.chave ? '#fff' : c.cor"></ion-icon>
+        {{ c.nome }}
+      </button>
+    </div>
+    <div #map id="map"></div>
   </ion-content>

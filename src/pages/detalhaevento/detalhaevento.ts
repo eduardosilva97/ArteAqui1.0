@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
-import { EventosService } from '../../providers/eventos-service/eventos-service';
+import { EventosService, textoPreco } from '../../providers/eventos-service/eventos-service';
+import { categoria, Categoria } from '../../providers/eventos-service/categorias';
 import { Subscription } from 'rxjs/Subscription';
 import { HomePage } from '../home/homepage/home';
 import { AdicionarEventosPage } from '../adicionareventos/adicionareventos';
@@ -12,16 +13,24 @@ import { AdicionarEventosPage } from '../adicionareventos/adicionareventos';
 })
 export class DetalhaPage {
   evento: any;
+  cat: Categoria;
+  preco: string;
   private inscricao: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService, private toast: ToastController) {
-    this.evento = this.navParams.get("evento") || {};
+    this.mostrar(this.navParams.get("evento") || {});
     // Mantém a tela atualizada depois de uma edição.
     this.inscricao = this.eventosService.get(this.evento.key).subscribe(atual => {
       if (atual) {
-        this.evento = atual;
+        this.mostrar(atual);
       }
     });
+  }
+
+  private mostrar(evento: any){
+    this.evento = evento;
+    this.cat = categoria(evento.categoria);
+    this.preco = textoPreco(evento.preco);
   }
 
   ngOnDestroy(){

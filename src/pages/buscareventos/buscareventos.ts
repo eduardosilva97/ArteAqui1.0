@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { EventosService } from '../../providers/eventos-service/eventos-service';
+import { EventosService, textoPreco } from '../../providers/eventos-service/eventos-service';
+import { categoria } from '../../providers/eventos-service/categorias';
 import { Subscription } from 'rxjs/Subscription';
 import { DetalhaPage } from '../detalhaevento/detalhaevento';
 
@@ -14,11 +15,13 @@ export class BuscareventosPage {
   todos: any[] = [];
   eventos: any[] = [];
   busca = '';
+  categoria = categoria;
+  textoPreco = textoPreco;
   private inscricao: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService) {
     this.inscricao = this.eventosService.getAll().subscribe(lista => {
-      this.todos = lista;
+      this.todos = lista.slice().sort((a, b) => a.eventoNome.localeCompare(b.eventoNome, 'pt-BR'));
       this.filtrar();
     });
   }
@@ -32,11 +35,12 @@ export class BuscareventosPage {
     this.filtrar();
   }
 
-  // Procura pelo nome, local ou gênero, sem diferenciar maiúsculas nem acentos.
+  // Procura por nome, local, categoria ou descrição, sem diferenciar maiúsculas nem acentos.
   private filtrar() {
     const termo = this.normalizar(this.busca);
     this.eventos = this.todos.filter(e =>
-      !termo || [e.eventoNome, e.local, e.genero].some(campo => this.normalizar(campo).indexOf(termo) >= 0)
+      !termo || [e.eventoNome, e.local, e.genero, categoria(e.categoria).nome, e.descricao, e.quando]
+        .some(campo => this.normalizar(campo).indexOf(termo) >= 0)
     );
   }
 

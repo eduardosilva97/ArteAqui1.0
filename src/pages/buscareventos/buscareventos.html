@@ -1,23 +1,28 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Buscar Eventos</ion-title>
+    <ion-title>Buscar</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content >
-  <ion-searchbar placeholder="Nome, local ou gênero" (ionInput)="searchAction($event)"></ion-searchbar>
+<div class="conteudo-limitado">
+  <ion-searchbar placeholder="Nome, bairro, categoria (ex.: samba, museu, Pelourinho)" (ionInput)="searchAction($event)"></ion-searchbar>
+
+  <p class="total" padding-horizontal>{{ eventos.length }} {{ eventos.length === 1 ? 'resultado' : 'resultados' }}</p>
 
   <ion-list>
     <button ion-item *ngFor="let evento of eventos" (click)="marcarEvento(evento)">
+      <ion-icon [name]="'md-' + categoria(evento.categoria).icone" [style.color]="categoria(evento.categoria).cor" item-start></ion-icon>
       <h2>{{ evento.eventoNome }}</h2>
-      <p> Local: {{ evento.local }} </p>
-      <p> Preço: {{ evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis' }} </p>
+      <p>{{ categoria(evento.categoria).nome }}<span *ngIf="evento.local"> · {{ evento.local }}</span></p>
+      <p *ngIf="evento.quando || evento.date">{{ evento.quando || evento.date }}<span *ngIf="textoPreco(evento.preco)"> · {{ textoPreco(evento.preco) }}</span></p>
     </button>
     <ion-item *ngIf="!eventos.length" text-wrap>
-      Nenhum evento encontrado.
+      Nada encontrado.
     </ion-item>
   </ion-list>
+</div>
 </ion-content>

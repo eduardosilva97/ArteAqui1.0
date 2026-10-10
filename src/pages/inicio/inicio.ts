@@ -3,6 +3,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { SignupPage } from '../signup/signup';
 import { ResetpasswordPage } from '../resetpassword/resetpassword';
 import { SigninPage } from '../signin/signin';
+import { HomePage } from '../home/homepage/home';
 
 
 @Component({
@@ -39,6 +40,14 @@ export class InicioPage {
 
   signInWithEmailPage(){
     this.navCtrl.push(SigninPage);
+  }
+
+  voltarAoMapa(){
+    if (this.navCtrl.canGoBack()) {
+      this.navCtrl.pop();
+    } else {
+      this.navCtrl.setRoot(HomePage);
+    }
   }
 
 }

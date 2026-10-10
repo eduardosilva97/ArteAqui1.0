@@ -9,9 +9,10 @@ import { PerfilPage } from '../pages/perfil/perfil';
 import { AdicionarEventosPage } from '../pages/adicionareventos/adicionareventos';
 import { BuscareventosPage } from '../pages/buscareventos/buscareventos'
 import { EventosService } from '../providers/eventos-service/eventos-service';
+import { categoria } from '../providers/eventos-service/categorias';
 import { DetalhaPage } from '../pages/detalhaevento/detalhaevento';
 
-import { AuthService } from '../providers/auth/auth-service';
+import { AuthService, Usuario } from '../providers/auth/auth-service';
 import { Observable } from 'rxjs/Observable';
 @Component({
   templateUrl: 'app.html'
@@ -19,15 +20,18 @@ import { Observable } from 'rxjs/Observable';
 export class MyApp {
   @ViewChild('content')
   nav: Nav;
-  rootPage:any;
+  // O app abre direto no mapa; entrar com uma conta é opcional.
+  rootPage:any = HomePage;
   eventos: Observable<any>;
+  usuario: Observable<Usuario>;
+  categoria = categoria;
 
   constructor(private authService: AuthService, platform: Platform,
     statusBar: StatusBar, splashScreen: SplashScreen,
      private eventosService: EventosService, private toast: ToastController) {
 
-      this.eventos = this.eventosService.getAll();
-      this.rootPage = this.authService.usuarioAtual ? HomePage : InicioPage;
+      this.eventos = this.eventosService.getMeus();
+      this.usuario = this.authService.user;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -38,14 +42,23 @@ export class MyApp {
 
   }
 
+  entrar(){
+    this.nav.push(InicioPage);
+  }
+
   signOut(){
     this.authService.signOut()
     .then(() => {
-       this.nav.setRoot(InicioPage);
+       this.toast.create({ message: "Você saiu da sua conta.", duration: 2500}).present();
+       this.nav.setRoot(HomePage);
     })
     .catch((error) => {
       console.error(error);
     });
+  }
+
+  mapa(){
+    this.nav.setRoot(HomePage);
   }
 
   perfil(){

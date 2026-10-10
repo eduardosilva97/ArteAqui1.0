@@ -33,3 +33,8 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+# Arquivos intermediários da geração de dados
+dados/todos.json
+dados/igrejas.json
+dados/osm-curado.json

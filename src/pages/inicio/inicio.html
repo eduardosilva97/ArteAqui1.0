@@ -1,25 +1,36 @@
+<ion-header no-border>
+  <ion-navbar transparent>
+    <ion-title>Entrar</ion-title>
+  </ion-navbar>
+</ion-header>
 
-<ion-content padding class="bg-image">
+<ion-content padding class="fundo-entrada">
 
-  <p text-center><img src="assets/img/arte_aqui.png" alt="ArteAqui" width="220"></p>
+  <div class="cartao-entrada">
+    <p text-center class="logo"><img src="assets/img/arte_aqui.png" alt="ArteAqui"></p>
+    <p text-center class="chamada">Entre para guardar seu perfil. O mapa cultural continua aberto para todo mundo.</p>
 
+    <button ion-button block (click)="signInWithEmailPage()">
+      Login
+    </button>
+    <p text-center>Ou</p>
+    <button ion-button block color="light" (click)="createAccount()">
+      Criar conta
+    </button>
 
-  <button ion-button block color="" (click)="signInWithEmailPage()">
-    Login
-  </button>
-  <p text-center>Ou</p>
-  <button ion-button block color="light" (click)="createAccount()">
-    Criar conta
-  </button>
+    <button ion-button block icon-left color="facebook" margin-top (click)="createAccountf()">
+      <ion-icon name="logo-facebook"></ion-icon>
+      Login com o Facebook
+    </button>
 
-  <button ion-button block icon-left color="facebook" margin-top (click)="createAccountf()">
-    <ion-icon name="logo-facebook"></ion-icon>
-    Login com o Facebook
-  </button>
+    <button ion-button block icon-left color="danger" margin-top (click)="createAccountg()">
+      <ion-icon name="logo-google"></ion-icon>
+      Login com o Google
+    </button>
 
-  <button ion-button block icon-left color="danger" margin-top (click)="createAccountg()">
-    <ion-icon name="logo-google"></ion-icon>
-    Login com o Google
-  </button>
+    <button ion-button block clear margin-top (click)="voltarAoMapa()">
+      Continuar sem entrar
+    </button>
+  </div>
 
 </ion-content>

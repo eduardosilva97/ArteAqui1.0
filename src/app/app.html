@@ -1,35 +1,53 @@
+<!-- Em telas grandes o menu fica fixo ao lado do mapa -->
+<ion-split-pane when="lg">
 <ion-menu side="left" [content]="content">
         <ion-header>
           <ion-toolbar color='primary'>
-            <ion-title>Menu</ion-title>
+            <ion-title>ArteAqui</ion-title>
           </ion-toolbar>
         </ion-header>
 
 <ion-content>
     <ion-list>
-        <button color='light' ion-item (click)="perfil()" menuClose>
-            Perfil
+        <button ion-item (click)="mapa()" menuClose>
+            <ion-icon name="map" item-start></ion-icon>
+            Mapa cultural
         </button>
-        <button color='light' ion-item (click)="buscarEventos()" menuClose>
-            Buscar Eventos
+        <button ion-item (click)="buscarEventos()" menuClose>
+            <ion-icon name="search" item-start></ion-icon>
+            Buscar
         </button>
-        <button color='light' ion-item (click)="adicionarEvento()" menuClose>
-            Adicionar Evento
+        <button ion-item (click)="adicionarEvento()" menuClose>
+            <ion-icon name="add-circle" item-start></ion-icon>
+            Adicionar evento
         </button>
-         <button color='light' ion-item (click)="signOut()" menuClose>
-            Sair
-         </button>
+        <ng-container *ngIf="usuario | async as u; else semConta">
+            <button ion-item (click)="perfil()" menuClose>
+                <ion-icon name="contact" item-start></ion-icon>
+                Perfil <p>{{ u.nome || u.email }}</p>
+            </button>
+            <button ion-item (click)="signOut()" menuClose>
+                <ion-icon name="log-out" item-start></ion-icon>
+                Sair
+            </button>
+        </ng-container>
+        <ng-template #semConta>
+            <button ion-item (click)="entrar()" menuClose>
+                <ion-icon name="log-in" item-start></ion-icon>
+                Entrar ou criar conta
+            </button>
+        </ng-template>
     </ion-list>
-    <ion-toolbar color='cinzaclaro'>
-        <p>Principais Eventos <small>(arraste para o lado para editar ou remover)</small></p>
-    </ion-toolbar>
-    <ion-list>
+
+    <ion-list *ngIf="(eventos | async)?.length">
+       <ion-list-header>
+          Meus eventos <small>(arraste para o lado para editar ou remover)</small>
+       </ion-list-header>
        <ion-item-sliding *ngFor="let evento of eventos | async">
-            <button ion-item color='light' (click) = "detalharEvento(evento)" menuClose>
+            <button ion-item (click) = "detalharEvento(evento)" menuClose>
+                <ion-icon [name]="'md-' + categoria(evento.categoria).icone" [style.color]="categoria(evento.categoria).cor" item-start></ion-icon>
                 <h2>{{ evento.eventoNome }}</h2>
-                <p> Local: {{ evento.local }} </p>
-                <p> Gênero: {{ evento.genero }} </p>
-                <p> Preço: {{ evento.preco > 0 ? 'R$ ' + evento.preco : 'Grátis' }} </p>
+                <p>{{ evento.local }}</p>
            </button>
            <ion-item-options side="right">
                 <button ion-button color="primary" (click)="editarEvento(evento)" menuClose>Editar</button>
@@ -40,4 +58,5 @@
   </ion-content>
 
 </ion-menu>
-<ion-nav #content [root]="rootPage"  swipeBackEnabled="false"></ion-nav>
+<ion-nav #content [root]="rootPage" main swipeBackEnabled="false"></ion-nav>
+</ion-split-pane>
