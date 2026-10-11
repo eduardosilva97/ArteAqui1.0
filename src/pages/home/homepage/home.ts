@@ -24,6 +24,7 @@ export class HomePage {
   eventoEmFoco: any;
   categorias: Categoria[] = [];
   filtro: string = null;
+  temAgenda = false;
   private eventos: any[] = [];
   private visiveis: any[] = [];
   private inscricao: Subscription;
@@ -39,6 +40,7 @@ export class HomePage {
       this.eventos = eventos;
       // Só mostra na barra as categorias que têm algum ponto.
       this.categorias = CATEGORIAS.filter(c => eventos.some(e => categoria(e.categoria).chave === c.chave));
+      this.temAgenda = eventos.some(e => e.agenda);
       this.marcaMapa();
     });
   }
@@ -102,10 +104,12 @@ export class HomePage {
     this.eventos.forEach(evento => {
       const posicao = lerLatLng(evento.latlng);
       const cat = categoria(evento.categoria);
-      if (!posicao || (this.filtro && cat.chave !== this.filtro)) {
+      // O filtro "Agenda" mostra só os eventos com data; os outros filtram pela categoria.
+      const fora = this.filtro === 'agenda' ? !evento.agenda : this.filtro && cat.chave !== this.filtro;
+      if (!posicao || fora) {
         return;
       }
-      const marker = L.marker(posicao, { icon: this.icone(cat), title: evento.eventoNome });
+      const marker = L.marker(posicao, { icon: this.icone(cat, evento.agenda), title: evento.eventoNome });
       this.addInfoWindow(marker, this.conteudo(evento, cat));
       novos.push(marker);
       if (this.eventoEmFoco && this.eventoEmFoco.key === evento.key) {
@@ -133,10 +137,10 @@ export class HomePage {
     marker.bindPopup(content, { maxWidth: 260, minWidth: 200, autoPanPaddingTopLeft: L.point(10, 70) });
   }
 
-  // Alfinete na cor da categoria, com o ícone dela no meio.
-  private icone(cat: Categoria) {
+  // Alfinete na cor da categoria, com o ícone dela no meio. Evento da agenda ganha um selo de calendário.
+  private icone(cat: Categoria, agenda?: boolean) {
     return L.divIcon({
-      className: 'marcador-cultural',
+      className: 'marcador-cultural' + (agenda ? ' agenda' : ''),
       html: '<div class="pino" style="background:' + cat.cor + '"><ion-icon class="ion-md-' + cat.icone + '"></ion-icon></div>',
       iconSize: [34, 42],
       iconAnchor: [17, 42],

@@ -11,6 +11,7 @@ Mapa cultural de Salvador. Projeto de faculdade de 2018 (Eduardo Silva e Guilher
 - **Mapa com OpenStreetMap** (Leaflet), que não precisa de chave de API.
 - **Sem login obrigatório.** O app abre direto no mapa; criar conta é opcional.
 - **332 pontos culturais já marcados:** teatros, museus, cinemas, bibliotecas, igrejas e monumentos, além de festas populares, circuitos do carnaval, ensaios, rodas de capoeira, feiras e festivais, com data, preço e fonte.
+- **Agenda dos próximos dias, atualizada sozinha todo dia:** shows, peças, exposições e festas tirados de duas fontes públicas (o portal Salvador da Bahia, da Prefeitura, e a Agenda Cultural Salvador), sem IA e sem custo. O filtro **Agenda** mostra só esses eventos, e o que já passou some do mapa.
 - **Marcadores por categoria,** cada uma com cor e ícone próprios. Os pontos próximos ficam agrupados, e uma barra no topo filtra o mapa.
 - **Telas que estavam pela metade foram concluídas:** detalhes, busca, editar e remover evento, perfil.
 - **Responsivo.** Funciona bem no celular, no tablet e no computador.

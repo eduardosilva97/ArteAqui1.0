@@ -1,0 +1,59 @@
+# Atualiza a agenda cultural do site todo dia, sem rebuild: roda dados/agenda.py e grava o
+# resultado direto no branch gh-pages (o site publicado). Em repositório sem gh-pages, não faz nada.
+name: Atualizar agenda
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 6h em Salvador
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: agenda
+
+jobs:
+  agenda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Procurar o branch gh-pages
+        id: pages
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
+            echo "existe=sim" >> "$GITHUB_OUTPUT"
+          else
+            echo "Este repositório não publica pelo branch gh-pages; nada a fazer."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.pages.outputs.existe == 'sim'
+        with:
+          ref: gh-pages
+          path: site
+
+      # As buscas de endereço no Nominatim ficam guardadas entre uma execução e outra.
+      - uses: actions/cache@v4
+        if: steps.pages.outputs.existe == 'sim'
+        with:
+          path: dados/cache-geocodificacao.json
+          key: geocodificacao-${{ github.run_id }}
+          restore-keys: geocodificacao-
+
+      - name: Gerar a agenda
+        if: steps.pages.outputs.existe == 'sim'
+        run: python3 dados/agenda.py --saida site/assets/data/agenda.json --catalogo site/assets/data/locais-culturais.json
+
+      - name: Publicar
+        if: steps.pages.outputs.existe == 'sim'
+        working-directory: site
+        run: |
+          git add assets/data/agenda.json
+          if git diff --cached --quiet; then
+            echo "A agenda não mudou."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Agenda atualizada em $(TZ=America/Bahia date '+%d/%m/%Y %H:%M')"
+          git push -q

@@ -56,4 +56,16 @@ home-page {
       border-color: #488aff;
     }
   }
+
+  .filtro-agenda {
+    border-color: #488aff;
+
+    ion-icon {
+      color: #488aff;
+    }
+
+    &.ativo ion-icon {
+      color: #fff;
+    }
+  }
 }

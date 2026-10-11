@@ -21,7 +21,8 @@
     <ion-item text-wrap *ngIf="evento.quando || evento.date">Quando: <p>{{ evento.quando || evento.date }}</p></ion-item>
     <ion-item text-wrap *ngIf="preco">Preço: <p>{{ preco }}</p></ion-item>
     <ion-item *ngIf="evento.classificacao !== undefined && evento.classificacao !== null && evento.classificacao !== ''">Classificação Indicativa: <p>{{ evento.classificacao > 0 ? evento.classificacao + ' anos' : 'Livre' }}</p></ion-item>
-    <ion-item text-wrap *ngIf="evento.site">Site: <p><a [href]="evento.site" target="_blank" rel="noopener">{{ evento.site }}</a></p></ion-item>
+    <ion-item text-wrap *ngIf="evento.site && !evento.agenda">Site: <p><a [href]="evento.site" target="_blank" rel="noopener">{{ evento.site }}</a></p></ion-item>
+    <ion-item text-wrap *ngIf="evento.site && evento.agenda"><a ion-button block outline [href]="evento.site" target="_blank" rel="noopener">Ingressos e mais informações</a></ion-item>
 
     <ion-item><button ion-button block (click) = "marcaMapa()"> Marcar no Mapa </button></ion-item>
     <ion-item *ngIf="!evento.fixo">
@@ -29,7 +30,8 @@
       <button ion-button block outline color="danger" (click)="remover()">Remover</button>
     </ion-item>
     <ion-item text-wrap *ngIf="evento.fonte" class="fonte">
-      <p>Fonte: <a [href]="evento.fonte" target="_blank" rel="noopener">{{ evento.fonte.indexOf('openstreetmap.org') >= 0 ? 'OpenStreetMap' : evento.fonte }}</a></p>
+      <p>Fonte: <a [href]="evento.fonte" target="_blank" rel="noopener">{{ evento.fonteNome || (evento.fonte.indexOf('openstreetmap.org') >= 0 ? 'OpenStreetMap' : evento.fonte) }}</a></p>
+      <p *ngIf="atualizado">Agenda atualizada em {{ atualizado }}.</p>
     </ion-item>
 
 </ion-list>

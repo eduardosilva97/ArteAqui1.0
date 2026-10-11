@@ -74,6 +74,24 @@
       line-height: 1;
     }
   }
+
+  // Evento da agenda: um selo branco no canto do alfinete.
+  &.agenda .pino::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #488aff;
+    transform: rotate(45deg);
+  }
+  &.agenda .pino {
+    position: relative;
+  }
 }
 
 .grupo-marcadores {

@@ -7,13 +7,22 @@ import 'rxjs/add/operator/map';
 import { categoria } from './categorias';
 
 /*
-  Duas fontes de eventos, sem servidor:
+  Três fontes de eventos, sem servidor:
   - o catálogo de atividades culturais de Salvador (assets/data/locais-culturais.json), só leitura;
+  - a agenda dos próximos dias (assets/data/agenda.json), gerada por dados/agenda.py e atualizada
+    todo dia pelo GitHub Actions, só leitura;
   - os eventos que a pessoa cadastra, guardados no localStorage do navegador.
 */
 
 const CHAVE_EVENTOS = 'arteaqui.eventos';
 const CATALOGO = 'assets/data/locais-culturais.json';
+const AGENDA = 'assets/data/agenda.json';
+
+// Data de hoje no fuso do aparelho, no formato da agenda (AAAA-MM-DD).
+function hoje(): string {
+  const d = new Date();
+  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+}
 
 // Converte o campo "Latitude e Longitude" do formulário ("-12.97, -38.51") em [lat, lng].
 export function lerLatLng(texto: string): [number, number] {
@@ -39,6 +48,7 @@ export function textoPreco(preco: any): string {
 export class EventosService {
 
   private catalogo = new BehaviorSubject<any[]>([]);
+  private agenda = new BehaviorSubject<any[]>([]);
   private meus: BehaviorSubject<any[]>;
 
   constructor(private http: Http) {
@@ -49,11 +59,20 @@ export class EventosService {
         lista => this.catalogo.next(lista.map(e => ({ ...e, fixo: true }))),
         erro => console.error('Não foi possível carregar o catálogo cultural', erro)
       );
+    // Some com o que já passou, mesmo que a atualização diária tenha falhado.
+    this.http.get(AGENDA)
+      .map(res => res.json())
+      .subscribe(
+        agenda => this.agenda.next(agenda.eventos
+          .filter(e => e.fim >= hoje())
+          .map(e => ({ ...e, fixo: true, agenda: true, atualizado: agenda.atualizado }))),
+        erro => console.error('Não foi possível carregar a agenda', erro)
+      );
   }
 
-    // Catálogo + eventos da pessoa
+    // Catálogo + agenda + eventos da pessoa
     getAll(): Observable<any[]> {
-      return Observable.combineLatest(this.catalogo, this.meus, (a, b) => a.concat(b));
+      return Observable.combineLatest(this.catalogo, this.agenda, this.meus, (a, b, c) => a.concat(b, c));
     }
 
     getMeus(): Observable<any[]> {

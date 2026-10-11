@@ -15,6 +15,7 @@ export class DetalhaPage {
   evento: any;
   cat: Categoria;
   preco: string;
+  atualizado: string;
   private inscricao: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private eventosService: EventosService, private toast: ToastController) {
@@ -31,6 +32,9 @@ export class DetalhaPage {
     this.evento = evento;
     this.cat = categoria(evento.categoria);
     this.preco = textoPreco(evento.preco);
+    // "2026-10-11T06:00-03:00" -> "11/10/2026 às 06:00"
+    const a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/.exec(evento.atualizado || '');
+    this.atualizado = a ? a[3] + '/' + a[2] + '/' + a[1] + ' às ' + a[4] : '';
   }
 
   ngOnDestroy(){
